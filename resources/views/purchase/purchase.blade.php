@@ -52,7 +52,7 @@
                                                     <td>{{ $d->total_item }}</td>
                                                     <td>{{ $d->total_price }}</td>
                                                     <td>
-                                                        <a href="{{ route('product.detail', ['id' => $d->id]) }}"
+                                                        <a href="{{ route('purchase.detail', ['id' => $d->id]) }}"
                                                             class="btn btn-info"><i class="fas fa-eye"></i> Detail</a>
                                                         <a href="{{ route('purchase.edit', ['id' => $d->id]) }}"
                                                             class="btn btn-primary"><i class="fas fa-pen"></i> Edit</a>
@@ -72,12 +72,12 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <p>Apakah kamu yakin ingin menghapus data produk
+                                                                <p>Apakah kamu yakin ingin menghapus data pembelian produk
                                                                     <b>{{ $d->name }}</b>
                                                                 </p>
                                                             </div>
                                                             <div class="modal-footer justify-content-between">
-                                                                <form action="{{ route('product.delete', ['id' => $d->id]) }}"
+                                                                <form action="{{ route('purchase.delete', ['id' => $d->id]) }}"
                                                                     method="POST">
                                                                     @csrf
                                                                     @method('DELETE')

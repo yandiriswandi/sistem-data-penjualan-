@@ -60,7 +60,7 @@ class PurchaseController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $purchase = Purchase::with(['supplier','products'])->find($id);
+        $purchase = Purchase::with(['supplier', 'products'])->find($id);
 
         // Ambil semua kategori dan supplier untuk ditampilkan dalam dropdown
         $products = Product::all();
@@ -72,6 +72,8 @@ class PurchaseController extends Controller
 
     public function update(Request $request, $id)
     {
+        $purchase = Purchase::find($id);
+
         $validatedData = $request->validate([
             'date' => 'required|date',
             'total_item' => 'required|integer',
@@ -85,24 +87,51 @@ class PurchaseController extends Controller
         ]);
 
         // Buat pembelian baru
-        $purchase = Purchase::create([
+        $data = [
             'date' => $validatedData['date'],
             'total_item' => $validatedData['total_item'],
             'discount' => $validatedData['discount'],
             'total_price' => $validatedData['total_price'],
             'supplier_id' => $validatedData['supplier_id'],
-        ]);
-
+        ];
+        $purchase->update($data);
         // Menambahkan produk ke pembelian dengan data pivot
+        $syncData = [];
         foreach ($validatedData['items'] as $item) {
-            $purchase->products()->attach($item['id'], [
+            $syncData[$item['id']] = [
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
-            ]);
+            ];
         }
+
+        $purchase->products()->sync($syncData);
         // dd($purchase);
 
         // Redirect atau response sesuai kebutuhan
         return redirect()->route('purchase')->with('success', 'Purchase added successfully.');
+    }
+
+    public function detail(Request $request, $id)
+    {
+        $purchase = Purchase::with(['supplier', 'products'])->find($id);
+
+        // Ambil semua kategori dan supplier untuk ditampilkan dalam dropdown
+        $products = Product::all();
+        $suppliers = Supplier::all();
+        // dd($product);
+
+        return view('purchase.purchase-detail', compact('purchase', 'products', 'suppliers'));
+    }
+    
+    public function delete(Request $request, $id)
+    {
+        $data = Purchase::find($id);
+
+        if ($data) {
+            $data->forceDelete();
+        }
+        $message = 'Purchase has been deleted!';
+
+        return redirect()->route('purchase')->with('success', $message);
     }
 }

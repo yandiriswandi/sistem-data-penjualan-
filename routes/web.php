@@ -26,7 +26,7 @@ Route::get('/products', [ProductController::class, 'products'])->name('product')
 Route::get('/products/add', [ProductController::class, 'productAdd'])->name('product-add');
 Route::post('/store', [ProductController::class, 'store'])->name('product.store');
 Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
-Route::get('/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
+// Route::get('/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
 Route::get('products/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
 Route::put('/update/{id}', [ProductController::class, 'update'])->name('product.update');
 Route::get('products/detail/{id}', [ProductController::class, 'detail'])->name('product.detail');
@@ -34,3 +34,9 @@ Route::get('purchases', [PurchaseController::class, 'purchases'])->name('purchas
 Route::get('purchases/add', [PurchaseController::class, 'purchasesAdd'])->name('purchase.add');
 Route::post('purchases/store', [PurchaseController::class, 'store'])->name('purchase.store');
 Route::get('purchases/edit/{id}', [PurchaseController::class, 'edit'])->name('purchase.edit');
+Route::put('purchases/update/{id}', [PurchaseController::class, 'update'])->name('purchase.update');
+Route::get('purchases/detail/{id}', [PurchaseController::class, 'detail'])->name('purchase.detail');
+Route::delete('purchases/delete/{id}', [PurchaseController::class, 'delete'])->name('purchase.delete');
+
+
+

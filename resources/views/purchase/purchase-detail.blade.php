@@ -50,7 +50,7 @@
                                                 <div class="form-group">
                                                     <label for="date">Tanggal</label>
                                                     <input type="date" class="form-control" id="date" name="date"
-                                                        value="{{ old('date', $purchase->date) }}"
+                                                        readonly value="{{ old('date', $purchase->date) }}"
                                                         placeholder="Select a date" value="{{ old('date') }}" required>
                                                     @error('date')
                                                         <span class="invalid-feedback text-danger">{{ $message }}</span>
@@ -77,8 +77,9 @@
                                                     <label for="discount">Diskon</label>
                                                     <input type="number" name="discount"
                                                         class="form-control @error('discount') is-invalid @enderror"
-                                                        id="discount" placeholder="Diskon" value="{{ old('discount') }}"
-                                                        required value="{{ old('discount', $purchase->discount) }}">
+                                                        readonly id="discount" placeholder="Diskon"
+                                                        value="{{ old('discount') }}" required
+                                                        value="{{ old('discount', $purchase->discount) }}">
                                                     @error('discount')
                                                         <span class="invalid-feedback text-danger">{{ $message }}</span>
                                                     @enderror
@@ -101,7 +102,7 @@
                                                 <div class="form-group">
                                                     <label for="supplier_id">Supllier</label>
                                                     <div>
-                                                        <select id="supplier_id" name="supplier_id"
+                                                        <select id="supplier_id" name="supplier_id" disabled
                                                             class="form-control  @error('supplier_id') is-invalid @enderror"
                                                             required>
                                                             <option value="">Select supplier</option>
@@ -121,59 +122,30 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @foreach ($purchase->products as $index => $product)
-                                            <div class="item-row" data-index="{{ $index }}">
-                                                <div class="form-group">
-                                                    <label for="product_{{ $index }}">Produk</label>
-                                                    <select name="items[{{ $index }}][id]"
-                                                        class="form-control product-select"
-                                                        data-index="{{ $index }}" required>
-                                                        <option value="">Pilih Produk</option>
-                                                        @foreach ($products as $prod)
-                                                            <option value="{{ $prod->id }}"
-                                                                {{ $prod->id == $product->id ? 'selected' : '' }}
-                                                                data-price="{{ $prod->price }}">
-                                                                {{ $prod->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="quantity_{{ $index }}">Kuantitas</label>
-                                                    <input type="number" name="items[{{ $index }}][quantity]"
-                                                        class="form-control quantity-input"
-                                                        data-index="{{ $index }}" min="1"
-                                                        value="{{ $product->pivot->quantity }}" required>
-                                                </div>
-                                                <input type="hidden" name="items[{{ $index }}][price]"
-                                                    class="price-input" data-index="{{ $index }}"
-                                                    value="{{ $product->pivot->price }}">
-                                                <div class="form-group">
-                                                    <label>Total Harga</label>
-                                                    <input type="text" class="form-control total-price"
-                                                        data-index="{{ $index }}"
-                                                        value="{{ $product->pivot->quantity * $product->pivot->price }}"
-                                                        readonly>
-                                                </div>
-                                                <button type="button" class="btn btn-danger remove-item"
-                                                    data-index="{{ $index }}">Hapus</button>
-                                                <hr>
-                                            </div>
-                                        @endforeach
+
+                                        <table id="example1" class="table table-hover text-nowrap w-100"
+                                            style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Produk</th>
+                                                    <th>Jumlah</th>
+                                                    <th>Harga Satuan</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($purchase->products as $d)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $d->name ?? '' }}</td>
+                                                        <th>{{ $d->pivot->quantity }}</th>
+                                                        <th>{{ $d->pivot->price }}</th>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     </div>
-
-                                    <button type="button" class="btn btn-primary mb-4" id="add-item">Tambah
-                                        Item</button>
-                                    {{-- <button type="submit" class="btn btn-success">Simpan</button> --}}
-                                </div>
-
-                                <div class="card-footer text-right">
-                                    <button class="btn btn-dark mr-1" type="reset"><i
-                                            class="fa-solid fa-arrows-rotate"></i>
-                                        Reset</button>
-                                    <button class="btn btn-success" type="submit"><i
-                                            class="fa-solid fa-floppy-disk"></i>
-                                        Save</button>
                                 </div>
                             </form>
 
@@ -188,7 +160,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let itemIndex = {{ $purchase->products->count() }};
+        let itemIndex = 0;
 
         document.getElementById('add-item').addEventListener('click', function() {
             itemIndex++;
