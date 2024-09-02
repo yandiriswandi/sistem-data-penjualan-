@@ -51,6 +51,11 @@ class PurchaseController extends Controller
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
             ]);
+
+            // Update quantity produk
+            $product = Product::find($item['id']);
+            $product->stock += $item['quantity'];
+            $product->save();
         }
         // dd($purchase);
 
@@ -73,7 +78,7 @@ class PurchaseController extends Controller
     public function update(Request $request, $id)
     {
         $purchase = Purchase::find($id);
-
+    
         $validatedData = $request->validate([
             'date' => 'required|date',
             'total_item' => 'required|integer',
@@ -85,8 +90,15 @@ class PurchaseController extends Controller
             'items.*.quantity' => 'required|integer',
             'items.*.price' => 'required|numeric',
         ]);
-
-        // Buat pembelian baru
+    
+        // Mengembalikan stok lama
+        foreach ($purchase->products as $product) {
+            $originalQuantity = $product->pivot->quantity;
+            $product->stock -= $originalQuantity;
+            $product->save();
+        }
+    
+        // Update data pembelian
         $data = [
             'date' => $validatedData['date'],
             'total_item' => $validatedData['total_item'],
@@ -95,21 +107,27 @@ class PurchaseController extends Controller
             'supplier_id' => $validatedData['supplier_id'],
         ];
         $purchase->update($data);
-        // Menambahkan produk ke pembelian dengan data pivot
+    
+        // Menyinkronkan produk dengan pembelian baru dan mengupdate stok produk
         $syncData = [];
         foreach ($validatedData['items'] as $item) {
             $syncData[$item['id']] = [
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
             ];
+    
+            // Update quantity produk
+            $product = Product::find($item['id']);
+            $product->stock += $item['quantity'];
+            $product->save();
         }
-
+    
         $purchase->products()->sync($syncData);
-        // dd($purchase);
-
+    
         // Redirect atau response sesuai kebutuhan
-        return redirect()->route('purchase')->with('success', 'Purchase added successfully.');
+        return redirect()->route('purchase')->with('success', 'Purchase updated successfully.');
     }
+    
 
     public function detail(Request $request, $id)
     {
@@ -122,7 +140,7 @@ class PurchaseController extends Controller
 
         return view('purchase.purchase-detail', compact('purchase', 'products', 'suppliers'));
     }
-    
+
     public function delete(Request $request, $id)
     {
         $data = Purchase::find($id);
