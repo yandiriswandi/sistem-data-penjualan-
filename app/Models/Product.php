@@ -29,4 +29,8 @@ class Product extends Model
     {
         return $this->belongsToMany(Supplier::class, 'products_suppliers');
     }
+    public function purchases()
+    {
+        return $this->belongsToMany(Purchase::class, 'products_purchases')->withPivot('quantity', 'price')->withTimestamps(); // Ini memastikan timestamps dikelola;
+    }
 }

@@ -54,7 +54,7 @@
                                                     <td>
                                                         <a href="{{ route('product.detail', ['id' => $d->id]) }}"
                                                             class="btn btn-info"><i class="fas fa-eye"></i> Detail</a>
-                                                        <a href="{{ route('product.edit', ['id' => $d->id]) }}"
+                                                        <a href="{{ route('purchase.edit', ['id' => $d->id]) }}"
                                                             class="btn btn-primary"><i class="fas fa-pen"></i> Edit</a>
                                                         <a id="btn-delete" data-toggle="modal"
                                                             data-target="#modal-hapus{{ $d->id }}"

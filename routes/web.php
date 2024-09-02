@@ -32,15 +32,5 @@ Route::put('/update/{id}', [ProductController::class, 'update'])->name('product.
 Route::get('products/detail/{id}', [ProductController::class, 'detail'])->name('product.detail');
 Route::get('purchases', [PurchaseController::class, 'purchases'])->name('purchase');
 Route::get('purchases/add', [PurchaseController::class, 'purchasesAdd'])->name('purchase.add');
-
-
-
-
-
-
-
-
-
-
-
-
+Route::post('purchases/store', [PurchaseController::class, 'store'])->name('purchase.store');
+Route::get('purchases/edit/{id}', [PurchaseController::class, 'edit'])->name('purchase.edit');

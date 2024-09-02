@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamps();
             $table->date('date');
             $table->foreignIdFor(Supplier::class)->constrained()->cascadeOnDelete();
-            $table->string('discount', 50);
+            $table->string('discount', 50)->nullable();
             $table->string('total_price', 50);
             $table->string('total_item', 50);
         });
