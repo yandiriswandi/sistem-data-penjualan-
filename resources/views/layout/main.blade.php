@@ -224,6 +224,26 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('category') }}"
+                                class="nav-link {{ request()->is('category*') ? 'bg-success' : '' }}">
+
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                 Category
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('supplier') }}"
+                                class="nav-link {{ request()->is('supplier*') ? 'bg-success' : '' }}">
+
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>
+                                 Supplier
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('product') }}"
                                 class="nav-link {{ request()->is('products*') ? 'bg-success' : '' }}">
 

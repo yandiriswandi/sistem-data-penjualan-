@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +39,10 @@ Route::get('purchases/edit/{id}', [PurchaseController::class, 'edit'])->name('pu
 Route::put('purchases/update/{id}', [PurchaseController::class, 'update'])->name('purchase.update');
 Route::get('purchases/detail/{id}', [PurchaseController::class, 'detail'])->name('purchase.detail');
 Route::delete('purchases/delete/{id}', [PurchaseController::class, 'delete'])->name('purchase.delete');
+Route::get('/category', [CategoryController::class, 'category'])->name('category');
+Route::get('/supplier', [SupplierController::class, 'supplier'])->name('supplier');
+
+
 
 
 
